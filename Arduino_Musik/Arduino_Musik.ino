@@ -1,12 +1,16 @@
+#include <pitches.h>
+
 void setup() // Im Setup werden keine Informationen benötigt.
-//Die Spannungsausgabe für den Piezo-Lautsprecher wird im Sketch durch den Arduino-Befehl "tone" automatisch festgelegt.
 {
+  pinMode (7,OUTPUT);
+  tone(7, NOTE_C4, 100); // An Pin8 wird die Note C4 für 1000ms gespielt
+  delay(1000); //Nachdem die Note ertönt, pausiert der Sketch für 3 Sekunden. Das bedeutet, dass nachdem der Ton zu ende gespielt wurde, noch zwei Sekunden Pause ohne Ton verbleiben.
+  tone(7, NOTE_G3, 100); // An Pin8 wird die Note G3 für 1000ms gespielt
+  delay(1000);
 }
 
 void loop()
 {
-/*tone(7, 100); // Im Hauptteil wird nun mit dem Befehl "tone ( x , y )" ein Ton abgegeben.
-delay(1000); // mit einer Dauer von 1 Sekunde
-noTone(7); // Der Ton wird abgeschaltet
-delay(1000); // Der Lautsprecher bleibt eine Sekunde aus*/
+
 }
+
