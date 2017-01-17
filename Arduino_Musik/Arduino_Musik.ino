@@ -1,36 +1,30 @@
+#include <Keyboard.h>
 #include <pitches.h>
-//int notecollection[88];
-// the array beneath has al the notes acessable from an standart piano, 
-int notecollection[]= { NOTE_C1, NOTE_CS1, NOTE_D1, NOTE_DS1,NOTE_E1,NOTE_F1, NOTE_FS1,NOTE_G1, NOTE_GS1, NOTE_A1,NOTE_AS1, NOTE_B1,
-                        NOTE_C2, NOTE_CS2, NOTE_D2,NOTE_DS2, NOTE_E2, NOTE_F2, NOTE_FS2, NOTE_G2,NOTE_GS2, NOTE_A2, NOTE_AS2, NOTE_B2, 
-                        NOTE_C3,NOTE_CS3, NOTE_D3, NOTE_DS3, NOTE_E3, NOTE_F3,NOTE_FS3, NOTE_G3, NOTE_GS3, NOTE_A3, NOTE_AS3, NOTE_B3, 
-                        NOTE_C4, NOTE_CS4, NOTE_D4, NOTE_DS4,NOTE_E4, NOTE_F4, NOTE_FS4, NOTE_G4, NOTE_GS4,NOTE_A4, NOTE_AS4, NOTE_B4, 
-                        NOTE_C5, NOTE_CS5,NOTE_D5, NOTE_DS5, NOTE_E5, NOTE_F5, NOTE_FS5,NOTE_G5, NOTE_GS5, NOTE_A5, NOTE_AS5, NOTE_B5,
-                        NOTE_C6, NOTE_CS6, NOTE_D6, NOTE_DS6, NOTE_E6,NOTE_F6, NOTE_FS6, NOTE_G6, NOTE_GS6, NOTE_A6,NOTE_AS6, NOTE_B6,
-                        NOTE_C7, NOTE_CS7, NOTE_D7,NOTE_DS7, NOTE_E7, NOTE_F7, NOTE_FS7, NOTE_G7,NOTE_GS7, NOTE_A7, NOTE_AS7, NOTE_B7, 
-                        NOTE_C8};
-String notename[]=
-{
-  "B0" "C1", "Cis1", "D1", "Dis1", "E1", "F1", "Fis1", "G1", "Gis1", "A1", "Ais1", "B1",
-  "C2", "Cis2", "D2", "Dis2", "E2", "F2", "Fis2", "G2", "Gis2", "A2", "Ais2", "B2",
-  "C3", "Cis3", "D3", "Dis3", "E3", "F3", "Fis3", "G3", "Gis3", "A3", "Ais3", "B3",
-};
 
+int notenfreq[7][12]=  {  {33,35,37,39,41,44,46,49,52,55,58,62},
+                          {65,69,73,78,82,87,93,98,104,110,117,123},
+                          {131,139,147,156,165,175,185,196,208,220,233,247},
+                          {262,277,294,311,330,349,370,392,415,440,466,494},
+                          {523,554, 587, 622,659,698,740,784,831,880,932,988},
+                          {1047,1109,1175,1245,1319,1397,1480,1568,1661,1760,1865,1976},
+                          {2093,2217,2349,2489,2637,2794,2960,3136,3322,3520,3729,3951}
+                        };
+                         
+String notenname[] = {  "C1", "Cis1", "D1", "Dis1", "E1", "F1", "Fis1", "G1", "Gis1", "A1", "Ais1", "B1",
+              "C2", "Cis2", "D2", "Dis2", "E2", "F2", "Fis2", "G2", "Gis2", "A2", "Ais2", "B2",
+              "C3", "Cis3", "D3", "Dis3", "E3", "F3", "Fis3", "G3", "Gis3", "A3", "Ais3", "B3",
+              "C4", "Cis4", "D4", "Dis4", "E4", "F4", "Fis4", "G4", "Gis4", "A4", "Ais4", "B4",
+              "C5", "Cis5", "D5", "Dis5", "E5", "F5", "Fis5", "G5", "Gis5", "A5", "Ais5", "B5",
+              "C6", "Cis6", "D6", "Dis6", "E6", "F6", "Fis6", "G6", "Gis6", "A6", "Ais6", "B6",
+              "C7", "Cis7", "D7", "Dis7", "E7", "F7", "Fis7", "G7", "Gis7", "A7", "Ais7", "B7",
+};
 char incomingByte;
 void setup() 
 {
-  // unbedingt durchlesen
-  Keyboard.begin();
+  //unbedingt durchlesen
+  //Keyboard.begin();
   Serial.begin(9600);
   pinMode (7,OUTPUT);
-   int startingnote = 25;/ this is the note which sets the starting note for the scale 
-  pinMode (7,OUTPUT);
-  for (int i=startingnote; i<=startingnote+8; i++)
-  {
-    tone(7,notecollection[i],duration);
-    delay(gap);
-    }*/
-  
   
   /*tone(7, NOTE_C2, duration); // An Pin8 wird die Note C4 für 1000ms gespielt
   delay(gap); //Nachdem die Note ertönt, pausiert der Sketch für 3 Sekunden. Das bedeutet, dass nachdem der Ton zu ende gespielt wurde, noch zwei Sekunden Pause ohne Ton verbleiben.
@@ -40,23 +34,103 @@ void setup()
 void loop()
 {
  if (Serial.available() > 0) {
-    int gap = 1000;
+    int gap = 200;
     int duration = 500;
-    int tonhoehe;
-    if (incomingByte == '1')
-    incomingByte = Serial.read();
-   
+    int tonhoehe=4;
+    char incomingByte = Serial.read();
+    
+    if (incomingByte == 'a')
     {
-      tone(7,notecollection[5],duration);
-      Serial.println("Dies war ein E1");
+     int note= 0;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
     } 
-
-    if (incomingByte == '0')
+    if (incomingByte == 'w')
     {
-      
-      tone(7,notecollection[50],duration);
-      Serial.println("Dies war ein Cis5");
+     int note= 1;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 's')
+    {
+     int note= 2;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'e')
+    {
+     int note= 3;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'd')
+    {
+     int note= 4;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'f')
+    {
+     int note= 5;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+    Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 't')
+    {
+     int note= 6;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'g')
+    {
+     int note= 7;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'z')
+    {
+     int note= 8;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'h')
+    {
+     int note= 9;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'u')
+    {
+     int note= 10;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+     if (incomingByte == 'j')
+    {
+     int note= 11;
+      tone(7,notenfreq[tonhoehe-1][note],duration);
+      Serial.println("Note: " + notenname[note+((12*(tonhoehe-1)))] + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][(int)(note)]));
+    } 
+    if (incomingByte == 'x')
+    {
+      //tonfolge von  "alle meine Entchen"
+      int melodie[] = {0,2,4,5,7,7,9,9,9,9,7,9,9,9,9,7,5,5,5,5,4,4,2,2,2,2,0};
+      for (int i=0; i <=26; i++)
+      {
+         tone(7, notenfreq[tonhoehe-1][melodie[i]], duration);
+         delay(gap);
+         Serial.print((String)(i+1));
+         Serial.print(". Note: " + (String)(
+          notenname[melodie[i]+(12*(tonhoehe-1))]
+         )
+         );
+         Serial.println(" | Frequenz: " + (String)(
+          notenfreq[tonhoehe-1][(int)melodie[i]]
+         )
+         );
+      }
     }
-  } 
+/*  Serial.println(". Note: " + (String)(notenname[melodie[i]+((12*(tonhoehe-1)))]) + " | Frequenz: " + (String)(notenfreq[tonhoehe-1][melodie[i]]));*/
+  }
 }
 
